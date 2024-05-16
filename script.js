@@ -6,16 +6,18 @@ const newsApiKey = 'd9c33e81cfa04b72b8b951cd73666aea'; // Replace with your News
 // Fetch live crypto prices from CoinMarketCap
 async function fetchCryptoPrices() {
     try {
+        console.log('Fetching crypto prices...');
         const response = await axios.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
             headers: {
                 'X-CMC_PRO_API_KEY': cmcApiKey
             },
             params: {
                 start: '1',
-                limit: '30', // Change this to fetch more cryptocurrencies
+                limit: '10', // Change this to fetch more cryptocurrencies
                 convert: 'USD'
             }
         });
+        console.log('Prices fetched:', response.data);
         const prices = response.data.data;
         const ticker = document.querySelector('.ticker');
         ticker.innerHTML = '';
@@ -30,7 +32,9 @@ async function fetchCryptoPrices() {
 // Fetch Bitcoin price chart data
 async function fetchBitcoinChart() {
     try {
+        console.log('Fetching Bitcoin chart data...');
         const response = await axios.get('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1&interval=hourly');
+        console.log('Chart data fetched:', response.data);
         const data = response.data.prices.map(price => ({
             x: new Date(price[0]),
             y: price[1]
@@ -94,7 +98,9 @@ async function fetchBitcoinChart() {
 // Fetch latest crypto market news
 async function fetchCryptoNews() {
     try {
+        console.log('Fetching crypto news...');
         const response = await axios.get(`https://newsapi.org/v2/everything?q=cryptocurrency&apiKey=${newsApiKey}`);
+        console.log('News fetched:', response.data);
         const articles = response.data.articles;
         const newsFeed = document.getElementById('newsFeed');
         newsFeed.innerHTML = ''; // Clear previous news
