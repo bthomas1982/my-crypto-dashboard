@@ -1,11 +1,27 @@
 // script.js
 
-// Fetch live crypto prices
+const cmcApiKey = 'c9a08ac4-6a4d-4fd7-9232-5f13da7ef6b7'; // Replace with your CoinMarketCap API key
+const newsApiKey = 'd9c33e81cfa04b72b8b951cd73666aea'; // Replace with your News API key
+
+// Fetch live crypto prices from CoinMarketCap
 async function fetchCryptoPrices() {
     try {
-        const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
-        const prices = response.data;
-        document.querySelector('.ticker').innerText = `BTC: $${prices.bitcoin.usd} | ETH: $${prices.ethereum.usd}`;
+        const response = await axios.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
+            headers: {
+                'X-CMC_PRO_API_KEY': cmcApiKey
+            },
+            params: {
+                start: '1',
+                limit: '30', // Change this to fetch more cryptocurrencies
+                convert: 'USD'
+            }
+        });
+        const prices = response.data.data;
+        const ticker = document.querySelector('.ticker');
+        ticker.innerHTML = '';
+        prices.forEach(crypto => {
+            ticker.innerHTML += `${crypto.name} (${crypto.symbol}): $${crypto.quote.USD.price.toFixed(2)} | `;
+        });
     } catch (error) {
         console.error('Error fetching crypto prices:', error);
     }
@@ -28,7 +44,8 @@ async function fetchBitcoinChart() {
                     data: data,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1,
-                    fill: false
+                    fill: false,
+                    pointRadius: 0,
                 }]
             },
             options: {
@@ -36,13 +53,37 @@ async function fetchBitcoinChart() {
                     x: {
                         type: 'time',
                         time: {
-                            unit: 'hour'
+                            unit: 'hour',
+                            tooltipFormat: 'MMM DD, hA',
+                            displayFormats: {
+                                hour: 'MMM DD, hA'
+                            }
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            display: false
                         }
                     },
                     y: {
-                        beginAtZero: false
+                        ticks: {
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: '#444444'
+                        }
                     }
-                }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#ffffff'
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
             }
         });
     } catch (error) {
@@ -53,9 +94,10 @@ async function fetchBitcoinChart() {
 // Fetch latest crypto market news
 async function fetchCryptoNews() {
     try {
-        const response = await axios.get('https://newsapi.org/v2/everything?q=crypto&apiKey=d9c33e81cfa04b72b8b951cd73666aea');
+        const response = await axios.get(`https://newsapi.org/v2/everything?q=cryptocurrency&apiKey=${newsApiKey}`);
         const articles = response.data.articles;
         const newsFeed = document.getElementById('newsFeed');
+        newsFeed.innerHTML = ''; // Clear previous news
         articles.forEach(article => {
             const newsItem = document.createElement('div');
             newsItem.className = 'news-item';
