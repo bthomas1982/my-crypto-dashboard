@@ -53,7 +53,7 @@ async function fetchBitcoinChart() {
 // Fetch latest crypto market news
 async function fetchCryptoNews() {
     try {
-        const response = await axios.get('https://newsapi.org/v2/everything?q=crypto&apiKey=YOUR_NEWS_API_KEY');
+        const response = await axios.get('https://newsapi.org/v2/everything?q=crypto&apiKey=d9c33e81cfa04b72b8b951cd73666aea');
         const articles = response.data.articles;
         const newsFeed = document.getElementById('newsFeed');
         articles.forEach(article => {
