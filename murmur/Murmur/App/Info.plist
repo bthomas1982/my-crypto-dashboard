@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Murmur</string>
+	<key>CFBundleName</key>
+	<string>Murmur</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+
+	<!-- Why each permission exists — App Review reads these strings -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Murmur records audio so it can transcribe your meetings, lectures, and voice notes on your device.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Murmur transcribes your recordings entirely on your iPhone. Audio is never uploaded.</string>
+
+	<!-- Background audio so a recording keeps running when the screen locks -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+</dict>
+</plist>

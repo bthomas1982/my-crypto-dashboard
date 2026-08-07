@@ -1,0 +1,38 @@
+# Murmur — XcodeGen project definition
+#
+# Why XcodeGen? A hand-written .xcodeproj is fragile to author outside Xcode.
+# This file generates a clean project on any Mac:
+#
+#   brew install xcodegen
+#   cd murmur && xcodegen generate
+#   open Murmur.xcodeproj
+#
+name: Murmur
+options:
+  bundleIdPrefix: com.murmur
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "6.0"
+    DEVELOPMENT_TEAM: "" # <- set your Apple Developer Team ID here
+    CODE_SIGN_STYLE: Automatic
+    GENERATE_INFOPLIST_FILE: NO
+targets:
+  Murmur:
+    type: application
+    platform: iOS
+    sources:
+      - path: Murmur
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.murmur.app
+        INFOPLIST_FILE: Murmur/App/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Murmur/App/Murmur.entitlements
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        TARGETED_DEVICE_FAMILY: "1,2" # iPhone + iPad
+    # We ship our own Info.plist (referenced by INFOPLIST_FILE above); do NOT
+    # add an `info:` block here or XcodeGen would generate over it.
