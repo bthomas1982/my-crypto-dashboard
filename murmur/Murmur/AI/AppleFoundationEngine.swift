@@ -37,6 +37,21 @@ struct AppleFoundationEngine: SummarizationEngine {
         return response.content
     }
 
+    func answer(question: String, transcript: String, history: [ChatMessage]) async throws -> String {
+        guard case .available = SystemLanguageModel.default.availability else {
+            throw SummarizationError.modelUnavailable("Apple Intelligence is off or unsupported on this device.")
+        }
+        // The on-device session is single-shot here; we fold prior turns into the
+        // prompt so context is preserved without holding a live session.
+        let session = LanguageModelSession(instructions: PromptBuilder.askSystem(transcript: transcript))
+        let priorTurns = history.map { turn in
+            "\(turn.role == .user ? "User" : "Assistant"): \(turn.text)"
+        }.joined(separator: "\n")
+        let prompt = priorTurns.isEmpty ? question : "\(priorTurns)\nUser: \(question)"
+        let response = try await session.respond(to: prompt)
+        return response.content
+    }
+
     private static func describe(_ reason: SystemLanguageModel.Availability.UnavailableReason) -> String {
         switch reason {
         case .deviceNotEligible:      return "This device doesn't support Apple Intelligence."

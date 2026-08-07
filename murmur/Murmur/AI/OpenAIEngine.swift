@@ -31,6 +31,22 @@ struct OpenAIEngine: SummarizationEngine {
         guard !transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw SummarizationError.emptyTranscript
         }
+        return try await complete(messages: [
+            ("system", PromptBuilder.system),
+            ("user", PromptBuilder.userMessage(instructions: instructions, transcript: transcript)),
+        ])
+    }
+
+    func answer(question: String, transcript: String, history: [ChatMessage]) async throws -> String {
+        var messages: [(String, String)] = [("system", PromptBuilder.askSystem(transcript: transcript))]
+        messages += history.map { ($0.role.rawValue, $0.text) }
+        messages.append(("user", question))
+        return try await complete(messages: messages)
+    }
+
+    // MARK: - Chat Completions API
+
+    private func complete(messages: [(role: String, content: String)]) async throws -> String {
         guard let apiKey = KeychainStore.get(Self.keyAccount), !apiKey.isEmpty else {
             throw SummarizationError.missingAPIKey
         }
@@ -42,10 +58,7 @@ struct OpenAIEngine: SummarizationEngine {
 
         let body: [String: Any] = [
             "model": model,
-            "messages": [
-                ["role": "system", "content": PromptBuilder.system],
-                ["role": "user", "content": PromptBuilder.userMessage(instructions: instructions, transcript: transcript)],
-            ],
+            "messages": messages.map { ["role": $0.role, "content": $0.content] },
         ]
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
 

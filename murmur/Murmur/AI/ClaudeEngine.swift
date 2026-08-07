@@ -27,6 +27,21 @@ struct ClaudeEngine: SummarizationEngine {
         guard !transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw SummarizationError.emptyTranscript
         }
+        return try await complete(
+            system: PromptBuilder.system,
+            messages: [("user", PromptBuilder.userMessage(instructions: instructions, transcript: transcript))]
+        )
+    }
+
+    func answer(question: String, transcript: String, history: [ChatMessage]) async throws -> String {
+        var messages: [(String, String)] = history.map { ($0.role.rawValue, $0.text) }
+        messages.append(("user", question))
+        return try await complete(system: PromptBuilder.askSystem(transcript: transcript), messages: messages)
+    }
+
+    // MARK: - Anthropic Messages API
+
+    private func complete(system: String, messages: [(role: String, content: String)]) async throws -> String {
         guard let apiKey = KeychainStore.get(Self.keyAccount), !apiKey.isEmpty else {
             throw SummarizationError.missingAPIKey
         }
@@ -40,11 +55,8 @@ struct ClaudeEngine: SummarizationEngine {
         let body: [String: Any] = [
             "model": model,
             "max_tokens": 4096,
-            "system": PromptBuilder.system,
-            "messages": [[
-                "role": "user",
-                "content": PromptBuilder.userMessage(instructions: instructions, transcript: transcript),
-            ]],
+            "system": system,
+            "messages": messages.map { ["role": $0.role, "content": $0.content] },
         ]
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
 

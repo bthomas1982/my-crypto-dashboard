@@ -19,7 +19,13 @@ struct SettingsView: View {
                     } label: {
                         Label("Summary templates", systemImage: "doc.badge.gearshape")
                     }
+                    NavigationLink {
+                        PackStoreView()
+                    } label: {
+                        Label("Template packs", systemImage: "bag")
+                    }
                 }
+                syncSection
                 privacySection
                 aboutSection
             }
@@ -73,6 +79,16 @@ struct SettingsView: View {
                 modelHint: "e.g. \(OpenAIEngine.modelDefault)",
                 footnote: "Works with OpenAI or any compatible endpoint (OpenRouter, Azure, a local server)."
             )
+        }
+    }
+
+    private var syncSection: some View {
+        Section {
+            LabeledContent("iCloud sync", value: SharedStore.enableCloudSync ? "On" : "Off")
+        } footer: {
+            Text(SharedStore.enableCloudSync
+                 ? "Recordings sync privately across your devices via your own iCloud. Nothing passes through us."
+                 : "Recordings stay on this device. Enable iCloud sync in a build with the iCloud capability turned on.")
         }
     }
 

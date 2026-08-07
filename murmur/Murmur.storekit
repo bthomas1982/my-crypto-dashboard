@@ -1,0 +1,61 @@
+{
+  "identifier" : "MURMUR_STOREKIT_CONFIG",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : true,
+      "internalID" : "com.murmur.pack.sales",
+      "localizations" : [
+        {
+          "description" : "Turn sales calls into CRM-ready notes and next steps.",
+          "displayName" : "Sales Calls Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.murmur.pack.sales",
+      "referenceName" : "Sales Calls Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : true,
+      "internalID" : "com.murmur.pack.clinical",
+      "localizations" : [
+        {
+          "description" : "Structured SOAP and DAP session notes that stay on device.",
+          "displayName" : "Therapy & Clinical Notes Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.murmur.pack.clinical",
+      "referenceName" : "Therapy & Clinical Notes Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : true,
+      "internalID" : "com.murmur.pack.journalism",
+      "localizations" : [
+        {
+          "description" : "Interviews into quotes, verifiable facts, and follow-ups.",
+          "displayName" : "Journalism & Research Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.murmur.pack.journalism",
+      "referenceName" : "Journalism & Research Pack",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "MURMUR",
+    "_developerTeamID" : "",
+    "_lastSynchronizedDate" : 0
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

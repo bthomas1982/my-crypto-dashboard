@@ -3,36 +3,31 @@ import SwiftData
 
 @main
 struct MurmurApp: App {
-    // One local store for the whole app. No account, no server — everything
+    // One local store shared with App Intents. No account, no server — everything
     // lives on the device unless the user explicitly exports a note.
-    let container: ModelContainer
-
-    init() {
-        do {
-            container = try ModelContainer(
-                for: Recording.self, SummaryTemplate.self,
-                configurations: ModelConfiguration(isStoredInMemoryOnly: false)
-            )
-            BuiltInTemplates.seedIfNeeded(in: container.mainContext)
-        } catch {
-            fatalError("Could not create the Murmur data store: \(error)")
-        }
-    }
-
     @State private var router = AIRouter()
+    @State private var store = StoreManager()
+    @AppStorage("hasOnboarded") private var hasOnboarded = false
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(hasOnboarded: $hasOnboarded)
                 .tint(Theme.coral)
                 .environment(router)
+                .environment(store)
+                .task { await store.start() }
         }
-        .modelContainer(container)
+        .modelContainer(SharedStore.container)
     }
 }
 
 struct RootView: View {
+    @Binding var hasOnboarded: Bool
     var body: some View {
-        LibraryView()
+        if hasOnboarded {
+            LibraryView()
+        } else {
+            OnboardingView { hasOnboarded = true }
+        }
     }
 }

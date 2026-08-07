@@ -97,16 +97,29 @@ enum BuiltInTemplates {
             """,
             isBuiltIn: true, sortIndex: 6
         ),
+        SummaryTemplate(
+            name: "Speaker-labeled Transcript",
+            symbol: "person.2",
+            instructions: """
+            Re-format this transcript by speaker. Detect where the speaker changes and attribute each block to "Speaker 1", "Speaker 2", etc. — or to a name if the transcript makes it unambiguous. Keep the wording verbatim; only add speaker labels and paragraph breaks. Do not summarize.
+
+            Note: this works from the text alone (Murmur transcribes on-device without hardware speaker separation), so treat speaker boundaries as best-effort and don't guess names that aren't clearly stated.
+            """,
+            isBuiltIn: true, sortIndex: 7
+        ),
     ]
 
-    /// Seed the built-in templates once. Safe to call on every launch.
+    /// Seed any built-in templates that aren't already present. Runs on every
+    /// launch so app updates that add new built-ins reach existing installs —
+    /// while never duplicating or clobbering the user's edits.
     static func seedIfNeeded(in context: ModelContext) {
-        let descriptor = FetchDescriptor<SummaryTemplate>(
-            predicate: #Predicate { $0.isBuiltIn == true }
-        )
-        let existing = (try? context.fetch(descriptor)) ?? []
-        guard existing.isEmpty else { return }
-        for template in all { context.insert(template) }
-        try? context.save()
+        let existing = (try? context.fetch(FetchDescriptor<SummaryTemplate>())) ?? []
+        let existingNames = Set(existing.map(\.name))
+        var inserted = false
+        for template in all where !existingNames.contains(template.name) {
+            context.insert(template)
+            inserted = true
+        }
+        if inserted { try? context.save() }
     }
 }

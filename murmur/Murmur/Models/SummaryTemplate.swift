@@ -17,13 +17,19 @@ final class SummaryTemplate {
     var isBuiltIn: Bool
     var sortIndex: Int
 
+    /// If this template came from a paid vertical pack, the pack's product id.
+    /// Nil for built-in and user templates. Lets us seed pack templates on
+    /// purchase without duplicating them.
+    var packID: String?
+
     init(
         id: UUID = UUID(),
         name: String,
         symbol: String = "doc.text",
         instructions: String,
         isBuiltIn: Bool = false,
-        sortIndex: Int = 0
+        sortIndex: Int = 0,
+        packID: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -31,5 +37,6 @@ final class SummaryTemplate {
         self.instructions = instructions
         self.isBuiltIn = isBuiltIn
         self.sortIndex = sortIndex
+        self.packID = packID
     }
 }

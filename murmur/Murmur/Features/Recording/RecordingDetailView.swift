@@ -15,22 +15,44 @@ struct RecordingDetailView: View {
     @State private var runningTemplate: SummaryTemplate?
     @State private var errorMessage: String?
     @State private var editingTranscript = false
+    @State private var showAsk = false
+    @State private var player = AudioPlayer()
 
     var body: some View {
         List {
+            if recording.audioURL != nil {
+                Section { PlaybackBar(player: player) }
+            }
             summariesSection
             transcriptSection
         }
         .navigationTitle(recording.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    showTemplatePicker = true
+                    showAsk = true
                 } label: {
-                    Label("Summarize", systemImage: "sparkles")
+                    Label("Ask", systemImage: "bubble.left.and.text.bubble.right")
                 }
-                .disabled(!recording.hasTranscript || runningTemplate != nil)
+                .disabled(!recording.hasTranscript)
+
+                Menu {
+                    Button {
+                        showTemplatePicker = true
+                    } label: { Label("Summarize…", systemImage: "sparkles") }
+                        .disabled(!recording.hasTranscript || runningTemplate != nil)
+
+                    Button {
+                        UIPasteboard.general.string = NoteExporter.markdown(for: recording)
+                    } label: { Label("Copy as Markdown", systemImage: "doc.on.doc") }
+
+                    if let url = try? NoteExporter.htmlFileURL(for: recording) {
+                        ShareLink(item: url) { Label("Share as web page", systemImage: "square.and.arrow.up") }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
             }
         }
         .sheet(isPresented: $showTemplatePicker) {
@@ -39,11 +61,18 @@ struct RecordingDetailView: View {
                 Task { await run(template) }
             }
         }
-        .alert("Couldn't summarize", isPresented: .constant(errorMessage != nil)) {
+        .sheet(isPresented: $showAsk) {
+            AskNotesView(transcript: recording.transcript)
+        }
+        .alert("Something went wrong", isPresented: .constant(errorMessage != nil)) {
             Button("OK") { errorMessage = nil }
         } message: {
             Text(errorMessage ?? "")
         }
+        .onAppear {
+            if let url = recording.audioURL { player.load(url: url) }
+        }
+        .onDisappear { player.stop() }
     }
 
     // MARK: Summaries

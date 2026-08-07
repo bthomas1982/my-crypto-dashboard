@@ -61,5 +61,9 @@ final class AIRouter {
         return (text, engine.attribution)
     }
 
+    func answer(question: String, transcript: String, history: [ChatMessage]) async throws -> String {
+        try await engine.answer(question: question, transcript: transcript, history: history)
+    }
+
     func availability() async -> EngineAvailability { await engine.availability() }
 }

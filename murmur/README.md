@@ -64,13 +64,24 @@ engine. Adding a provider = adding one file.
 ```
 murmur/
 ├── project.yml                 # XcodeGen — generates the .xcodeproj
+├── Murmur.storekit             # StoreKit config for testing packs in Xcode
+├── docs/LISTING.md             # App Store listing copy
 └── Murmur/
-    ├── App/                    # entry point, Info.plist, entitlements
+    ├── App/                    # entry point, SharedStore, Info.plist, entitlements
     ├── Models/                 # SwiftData: Recording, Summary, SummaryTemplate
-    ├── Audio/                  # AudioRecorder, LiveTranscriber (on-device STT)
-    ├── AI/                     # SummarizationEngine + providers + Keychain
-    ├── Features/               # SwiftUI screens (Library, Record, Detail, Settings)
-    └── Support/                # Theme, built-in templates
+    ├── Audio/                  # AudioRecorder, LiveTranscriber (STT), AudioPlayer
+    ├── AI/                     # SummarizationEngine + providers + router + Keychain
+    ├── Store/                  # StoreManager (StoreKit 2), VerticalPacks
+    ├── Intents/                # App Intents / Siri Shortcuts
+    ├── Features/               # SwiftUI screens
+    │   ├── Onboarding/         # first-run flow
+    │   ├── Library/            # home list
+    │   ├── Recording/          # record, detail, playback
+    │   ├── Ask/                # "ask your notes" chat
+    │   ├── Store/              # template-pack store
+    │   └── Settings/           # provider/key, templates, packs
+    ├── Resources/              # Assets.xcassets (app icon, accent color)
+    └── Support/                # Theme, built-in templates, NoteExporter
 ```
 
 ---
@@ -126,12 +137,23 @@ brand-new OS frameworks.
 
 ## Roadmap
 
-- **Phase 1 (this scaffold):** record → on-device transcript → summarize with a
-  pluggable brain → local library, editable templates, BYO key. ✅ built
-- **Phase 2:** audio playback with transcript scrubbing, speaker labels,
-  "ask your notes" chat, iCloud sync, Share Sheet / Shortcuts actions.
-- **Phase 3:** vertical template packs (therapy, sales, journalism) as paid
-  add-ons; optional teams.
+- **Phase 1:** record → on-device transcript → summarize with a pluggable brain
+  → local library, editable templates, BYO key. ✅ built
+- **Phase 2:** audio playback + scrub, "ask your notes" chat, speaker-labeling
+  template, Markdown/web export, Siri Shortcuts, iCloud-sync-ready store. ✅ built
+- **Phase 3:** one-time vertical template packs (sales, clinical, journalism) via
+  StoreKit 2, first-run onboarding, app icon, App Store listing kit. ✅ built
+
+### Turning on the paid parts
+
+- **StoreKit packs:** the product IDs live in `Store/VerticalPacks.swift` and
+  `Murmur.storekit`. To test in Xcode: Edit Scheme ▸ Run ▸ Options ▸ StoreKit
+  Configuration ▸ `Murmur.storekit`. For real sales, recreate the same
+  non-consumable product IDs in App Store Connect.
+- **iCloud sync:** flip `SharedStore.enableCloudSync` to `true` and add the
+  iCloud + CloudKit capability (needs a paid Apple Developer account).
+- **Siri/Shortcuts:** the App Intents in `Intents/` register automatically; try
+  "Summarize my last recording" in the Shortcuts app after first launch.
 
 ## Business model
 

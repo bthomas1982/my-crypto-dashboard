@@ -27,6 +27,9 @@ targets:
     platform: iOS
     sources:
       - path: Murmur
+        excludes:
+          - "App/Info.plist"          # referenced via INFOPLIST_FILE, not a resource
+          - "App/Murmur.entitlements" # referenced via CODE_SIGN_ENTITLEMENTS
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.murmur.app
@@ -34,5 +37,7 @@ targets:
         CODE_SIGN_ENTITLEMENTS: Murmur/App/Murmur.entitlements
         ENABLE_USER_SCRIPT_SANDBOXING: YES
         TARGETED_DEVICE_FAMILY: "1,2" # iPhone + iPad
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
     # We ship our own Info.plist (referenced by INFOPLIST_FILE above); do NOT
     # add an `info:` block here or XcodeGen would generate over it.
