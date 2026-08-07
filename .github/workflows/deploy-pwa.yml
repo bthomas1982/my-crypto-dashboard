@@ -2,7 +2,7 @@ name: Deploy Murmur PWA
 
 on:
   push:
-    branches: ["claude/plaud-pro-alternative-spec-t30wlt"]
+    branches: ["main"]
     paths:
       - "web/**"
       - ".github/workflows/deploy-pwa.yml"
