@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <title>Murmur</title>
+  <meta name="theme-color" content="#D9482F">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Murmur">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand"><span class="dot"></span>Murmur</div>
+      <button class="iconbtn" id="nav-settings" aria-label="Settings">⚙︎</button>
+    </div>
+
+    <!-- LIBRARY -->
+    <main class="screen" id="screen-library">
+      <div id="library-list"></div>
+      <div class="empty hidden" id="library-empty">
+        <div class="big">🎙️</div>
+        <p>Nothing recorded yet.<br>Tap record to capture a meeting, lecture, or voice note.<br>It transcribes on your phone.</p>
+      </div>
+    </main>
+
+    <!-- RECORD -->
+    <main class="screen hidden recording" id="screen-record">
+      <button class="back" id="record-back">‹ Cancel</button>
+      <div class="timer"><span class="pulse" id="rec-pulse"></span><span id="rec-timer">0:00</span></div>
+      <div class="status" id="rec-status">Tap start to record</div>
+      <div class="bar"><span id="rec-progress"></span></div>
+      <div class="live-box" id="rec-live">Transcript will appear here after you stop…</div>
+      <button class="btn primary block" id="rec-toggle">Start recording</button>
+    </main>
+
+    <!-- DETAIL -->
+    <main class="screen hidden" id="screen-detail">
+      <button class="back" id="detail-back">‹ Library</button>
+      <div id="detail-content"></div>
+    </main>
+
+    <!-- ASK -->
+    <main class="screen hidden" id="screen-ask">
+      <button class="back" id="ask-back">‹ Back</button>
+      <h2>Ask your notes</h2>
+      <div class="chat" id="ask-chat"></div>
+      <div class="composer">
+        <input id="ask-input" placeholder="Ask about this recording…" autocomplete="off">
+        <button class="btn primary" id="ask-send">↑</button>
+      </div>
+    </main>
+
+    <!-- SETTINGS -->
+    <main class="screen hidden" id="screen-settings">
+      <button class="back" id="settings-back">‹ Back</button>
+      <h2>Your AI</h2>
+      <div class="note good">Transcription runs on your device with Whisper — no key, nothing uploaded. To summarize and chat, add your own Claude key below. Your key stays in this browser and calls Anthropic directly.</div>
+      <div class="field" style="margin-top:16px">
+        <label for="set-key">Claude API key</label>
+        <input id="set-key" type="password" placeholder="sk-ant-..." autocomplete="off" autocapitalize="off" spellcheck="false">
+        <div class="hint">From console.anthropic.com — pay-as-you-go, separate from a Claude.ai subscription.</div>
+      </div>
+      <div class="field">
+        <label for="set-model">Claude model</label>
+        <input id="set-model" autocapitalize="off" spellcheck="false">
+        <div class="hint">Set this to a model your account can use.</div>
+      </div>
+      <h2>Transcription</h2>
+      <div class="field">
+        <label for="set-whisper">On-device Whisper model</label>
+        <select id="set-whisper">
+          <option value="Xenova/whisper-tiny.en">Tiny · English · fastest (≈40 MB)</option>
+          <option value="Xenova/whisper-base">Base · multilingual · better (≈150 MB)</option>
+        </select>
+        <div class="hint">Downloaded once, then cached. Larger = more accurate but slower on a phone.</div>
+      </div>
+      <button class="btn primary block" id="set-save">Save</button>
+      <div class="note" style="margin-top:20px">This is a browser prototype of the native Murmur app. The shipping iOS app uses Apple's on-device transcription and can summarize with a free on-device model — neither is available to web apps.</div>
+    </main>
+  </div>
+
+  <div class="fab-wrap" id="fab-wrap"><div class="fab-inner">
+    <button class="fab" id="fab-record"><span class="sq"></span>Record</button>
+  </div></div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
