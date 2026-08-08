@@ -16,6 +16,8 @@
 	<string>Murmur</string>
 	<key>CFBundleName</key>
 	<string>Murmur</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
