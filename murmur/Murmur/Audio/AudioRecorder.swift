@@ -1,5 +1,5 @@
 import Foundation
-import AVFoundation
+@preconcurrency import AVFoundation
 
 /// Captures microphone (and Bluetooth headset) audio, writes it to a file, and
 /// streams each buffer to the live transcriber. Configured for background audio
@@ -33,7 +33,7 @@ final class AudioRecorder: ObservableObject {
     func start() throws {
         let session = AVAudioSession.sharedInstance()
         try session.setCategory(.playAndRecord, mode: .default,
-                                options: [.allowBluetooth, .allowBluetoothA2DP, .defaultToSpeaker])
+                                options: [.allowBluetoothHFP, .allowBluetoothA2DP, .defaultToSpeaker])
         try session.setActive(true, options: .notifyOthersOnDeactivation)
 
         let input = engine.inputNode

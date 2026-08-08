@@ -81,8 +81,8 @@ final class StoreManager {
         Task.detached { [weak self] in
             for await update in Transaction.updates {
                 guard let self else { continue }
-                if let transaction = try? await self.checkVerified(update) {
-                    await MainActor.run { self.purchasedIDs.insert(transaction.productID) }
+                if let transaction = try? self.checkVerified(update) {
+                    await MainActor.run { _ = self.purchasedIDs.insert(transaction.productID) }
                     await transaction.finish()
                 }
             }

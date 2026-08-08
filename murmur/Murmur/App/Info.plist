@@ -30,6 +30,8 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 
 	<!-- Why each permission exists — App Review reads these strings -->
 	<key>NSMicrophoneUsageDescription</key>

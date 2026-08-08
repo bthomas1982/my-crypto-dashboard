@@ -1,6 +1,6 @@
 import Foundation
 import Speech
-import AVFoundation
+@preconcurrency import AVFoundation
 
 /// On-device transcription via iOS 26's SpeechAnalyzer / SpeechTranscriber.
 /// No length cap, no network, no per-minute cost — the whole reason Murmur can
