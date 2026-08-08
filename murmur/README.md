@@ -88,16 +88,17 @@ murmur/
 
 ## Build it (on a Mac)
 
-Murmur is a native iOS app, so it needs **Xcode on macOS** to compile — it can't
-be built from a phone or a Linux box. The source has no third-party Swift
-dependencies.
+Murmur is a native iOS app, so it needs **Xcode 26+ on macOS** to compile — it
+can't be built from a phone or a Linux box. The source has no third-party Swift
+dependencies. A ready-to-open `Murmur.xcodeproj` is committed, so just:
 
 ```bash
-brew install xcodegen           # one-time
 cd murmur
-xcodegen generate               # creates Murmur.xcodeproj from project.yml
 open Murmur.xcodeproj
 ```
+
+(No XcodeGen needed. `project.yml` is kept only for regenerating the project from
+scratch if you ever want to: `brew install xcodegen && xcodegen generate`.)
 
 Then in Xcode:
 

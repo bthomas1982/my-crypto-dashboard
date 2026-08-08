@@ -1,7 +1,7 @@
-# Xcode / generated project
-*.xcodeproj
+# Xcode — user-specific state (but keep the committed .xcodeproj itself)
 xcuserdata/
 *.xcuserstate
+*.xcuserdatad/
 DerivedData/
 build/
 .build/
