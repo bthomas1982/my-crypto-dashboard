@@ -18,11 +18,16 @@ enum SharedStore {
             cloudKitDatabase: enableCloudSync ? .automatic : .none
         )
         do {
-            let container = try ModelContainer(for: schema, configurations: config)
-            BuiltInTemplates.seedIfNeeded(in: container.mainContext)
-            return container
+            return try ModelContainer(for: schema, configurations: config)
         } catch {
             fatalError("Could not create the Murmur data store: \(error)")
         }
     }()
+
+    /// Seed built-in templates. Must run on the main actor (mainContext is
+    /// main-actor-isolated); call once at app launch.
+    @MainActor
+    static func seedTemplatesIfNeeded() {
+        BuiltInTemplates.seedIfNeeded(in: container.mainContext)
+    }
 }

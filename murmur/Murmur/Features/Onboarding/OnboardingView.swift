@@ -13,19 +13,19 @@ struct OnboardingView: View {
                 Panel(
                     symbol: "waveform",
                     title: "Record anything",
-                    body: "Meetings, lectures, calls on speaker, or a quick voice note. One tap and Murmur is listening."
+                    message: "Meetings, lectures, calls on speaker, or a quick voice note. One tap and Murmur is listening."
                 ).tag(0)
 
                 Panel(
                     symbol: "lock.shield",
                     title: "Transcribed on your iPhone",
-                    body: "Your audio never leaves the device. Transcription runs on-device — unlimited, private, and free."
+                    message: "Your audio never leaves the device. Transcription runs on-device — unlimited, private, and free."
                 ).tag(1)
 
                 Panel(
                     symbol: "sparkles",
                     title: "Think with your own AI",
-                    body: "Summaries and answers come from Apple's free on-device model — or plug in your own Claude or OpenAI key for more."
+                    message: "Summaries and answers come from Apple's free on-device model — or plug in your own Claude or OpenAI key for more."
                 ).tag(2)
 
                 brainChoice.tag(3)
@@ -83,7 +83,7 @@ struct OnboardingView: View {
 private struct Panel: View {
     let symbol: String
     let title: String
-    let body: String
+    let message: String
 
     var body: some View {
         VStack(spacing: 20) {
@@ -94,7 +94,7 @@ private struct Panel: View {
             Text(title)
                 .font(.largeTitle.bold())
                 .multilineTextAlignment(.center)
-            Text(body)
+            Text(message)
                 .font(.title3)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

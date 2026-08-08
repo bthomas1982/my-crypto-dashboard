@@ -15,6 +15,7 @@ struct MurmurApp: App {
                 .tint(Theme.coral)
                 .environment(router)
                 .environment(store)
+                .task { SharedStore.seedTemplatesIfNeeded() }
                 .task { await store.start() }
         }
         .modelContainer(SharedStore.container)
