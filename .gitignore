@@ -1,0 +1,8 @@
+# technocore agent -- never commit key material or replay state
+key.json
+nonces.json
+seq.json
+*.tmp.*
+.venv/
+__pycache__/
+.DS_Store
